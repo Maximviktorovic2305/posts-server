@@ -1,0 +1,24 @@
+version: "3" # версия синтаксиса
+services:
+   server: # Сервер Express
+      build: .
+      ports:
+         - "3000:3000"
+      depends_on:
+         - db
+         - react-app
+      environment:
+         DATABASE_URL: "mongodb+srv://admin:admin@cluster0.whhk2e3.mongodb.net/posts?retryWrites=true&w=majority&appName=Cluster0"
+   db: # База данных
+      image: prismagraphql/mongo-single-replica:5.0.3
+      ports:
+         - "27020:27020"
+      environment:
+         MONGO_INITDB_ROOT_USERNAME: admin
+         MONGO_INITDB_ROOT_PASSWORD: admin
+   react-app: # React-приложение
+      build: ../client # Путь к вашему React-приложению относительно корня вашего проекта
+      ports:
+         - "80:80" # Порт, на котором будет доступно ваше React-приложение
+volumes:
+   react_app: # Объявление именованного тома
